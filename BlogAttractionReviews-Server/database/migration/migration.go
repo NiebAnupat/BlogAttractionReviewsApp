@@ -15,7 +15,7 @@ func main() {
 
 	tx := db.Connect().Begin()
 
-	dropAllTable(tx)
+	dropAllTableIfExits(tx)
 
 	userMigration(tx)
 	blogMigration(tx)
@@ -47,7 +47,7 @@ func userFavoriteMigration(tx *gorm.DB) {
 	_ = tx.Migrator().CreateTable(&entities.UserFavorite{})
 }
 
-func dropAllTable(tx *gorm.DB) {
+func dropAllTableIfExits(tx *gorm.DB) {
 	isTableExist := tx.Migrator().HasTable(&entities.User{})
 	if isTableExist {
 		_ = tx.Migrator().DropTable(&entities.User{})
