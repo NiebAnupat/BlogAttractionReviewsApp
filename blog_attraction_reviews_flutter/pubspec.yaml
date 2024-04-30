@@ -1,0 +1,42 @@
+name: blog_attraction_reviews_flutter
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.1 <4.0.0'
+
+dependencies:
+  animated_notch_bottom_bar: ^1.0.2
+  auto_animated: ^3.2.0
+  blurrycontainer: ^1.0.2
+  currency_text_input_formatter: ^2.1.14
+  dartx: ^1.2.0
+  decimal: ^2.3.3
+  fl_chart: ^0.67.0
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.5.0
+  font_awesome_flutter: ^10.7.0
+  gap: ^3.0.1
+  get: ^4.6.6
+  google_fonts: ^6.2.1
+  intl: ^0.19.0
+  jiffy: ^6.3.0
+  jumping_dot: ^0.0.6
+  loading_indicator: ^3.1.1
+  logger: ^2.2.0
+  path_provider: ^2.1.2
+  persistent_bottom_nav_bar: ^5.0.2
+  sqflite: ^2.3.2
+  string_validator: ^1.0.2
+  toastification: ^1.2.1
+  uuid: ^4.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
