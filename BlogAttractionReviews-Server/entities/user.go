@@ -4,10 +4,10 @@ import "time"
 
 type (
 	User struct {
-		ID       string `gorm:"primaryKey;type:varchar(64);"`
-		Username string `gorm:"type:varchar(64);not null;unique"`
-		Email    string `gorm:"type:varchar(64);not null;unique"`
-		// Password string `gorm:"type:varchar(64);not null"`
+		ID            string         `gorm:"primaryKey;type:varchar(64);"`
+		Username      string         `gorm:"type:varchar(64);not null;unique"`
+		Email         string         `gorm:"type:varchar(64);not null;unique"`
+		Password      string         `gorm:"type:varchar(64);not null"`
 		Avatar        string         `gorm:"type:varchar(64);not null"`
 		CreateAt      time.Time      `gorm:"not null;autoCreateTime;"`
 		UpdateAt      time.Time      `gorm:"not null;autoUpdateTime;"`

@@ -7,7 +7,7 @@ type (
 		CreateAt      string         `gorm:"not null;autoCreateTime;"`
 		UpdateAt      string         `gorm:"not null;autoUpdateTime;"`
 		Contents      []BlogContent  `gorm:"foreignKey:BlogID"`
-		AutorID       string         `gorm:"type:varchar(64);not null;"`
+		AuthorID      string         `gorm:"type:varchar(64);not null;"`
 		UserLikes     []UserLike     `gorm:"foreignKey:BlogID"`
 		UserFavorites []UserFavorite `gorm:"foreignKey:BlogID"`
 	}
