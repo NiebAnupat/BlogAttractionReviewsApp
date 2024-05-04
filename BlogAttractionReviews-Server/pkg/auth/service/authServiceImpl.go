@@ -100,7 +100,33 @@ func (a *AuthServiceImple) Register(username string, email string, password stri
 
 // VerifyToken implements AuthService.
 func (a *AuthServiceImple) VerifyToken(token string) (string, error) {
-	panic("unimplemented")
+	hmacSecret := []byte(a.conf.JWT.SecretKey)
+	tkn, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return hmacSecret, nil
+	})
+	if err != nil {
+		log.Println(err)
+		return "", &_AuthException.VerifyToken{}
+	}
+	if !tkn.Valid {
+		return "", &_AuthException.VerifyToken{}
+	}
+	claims, ok := tkn.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", &_AuthException.VerifyToken{}
+	}
+	username, ok := claims["username"].(string)
+	if !ok {
+		return "", &_AuthException.VerifyToken{}
+	}
+
+	_, err = a.userRepository.FindByUsername(username)
+	if err != nil {
+		log.Println(err)
+		return "", &_AuthException.VerifyToken{}
+	}
+
+	return username, nil
 }
 
 func (a *AuthServiceImple) signToken(username string) (string, error) {

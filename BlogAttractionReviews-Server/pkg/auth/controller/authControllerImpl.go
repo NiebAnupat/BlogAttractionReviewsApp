@@ -58,7 +58,20 @@ func (a *AuthControllerImpl) Register(c *fiber.Ctx) error {
 }
 
 func (a *AuthControllerImpl) VerifyToken(c *fiber.Ctx) error {
-	panic("implement me")
+
+	token := c.FormValue("token")
+
+	username, err := a.authService.VerifyToken(token)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Invalid token",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message":  "Token is valid",
+		"username": username,
+	})
 }
 
 func (a *AuthControllerImpl) RefreshToken(c *fiber.Ctx) error {

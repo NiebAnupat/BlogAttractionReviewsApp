@@ -22,6 +22,6 @@ func (f *fiberServer) initAuthRouter() {
 	router.Post("/register", authController.Register)
 	router.Post("/login", authController.Login)
 	// router.Post("/logout", authController.Logout)
-	// router.Post("/verify", authController.VerifyToken)
+	router.Post("/verify", authController.VerifyToken)
 	// router.Post("/refresh", authController.RefreshToken)
 }
