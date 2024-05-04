@@ -10,7 +10,6 @@ type (
 	User struct {
 		ID            string         `gorm:"primaryKey;type:varchar(64);"`
 		Username      string         `gorm:"type:varchar(64);not null;unique"`
-		Email         string         `gorm:"type:varchar(64);not null;unique"`
 		Password      string         `gorm:"type:varchar(64);not null"`
 		Avatar        string         `gorm:"type:varchar(64);not null"`
 		CreateAt      time.Time      `gorm:"not null;autoCreateTime;"`
@@ -36,7 +35,6 @@ func (u *User) ToUserModel() *userModel.User {
 	return &userModel.User{
 		ID:       u.ID,
 		Username: u.Username,
-		Email:    u.Email,
 		Avatar:   u.Avatar,
 	}
 }

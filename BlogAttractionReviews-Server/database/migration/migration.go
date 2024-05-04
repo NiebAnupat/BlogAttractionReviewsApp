@@ -67,7 +67,6 @@ func dropAllTableIfExits(tx *gorm.DB) {
 }
 
 func clearS3Buckets(conf *config.Config) {
-	// Implement this function to clear all files in S3 bucket
 	s3Client := s3.New(session.Must(session.NewSession(&aws.Config{
 		Region:      aws.String(conf.AWS.Region),
 		Credentials: credentials.NewStaticCredentials(conf.AWS.S3.AccessKeyID, conf.AWS.S3.SecretAccessKey, ""),

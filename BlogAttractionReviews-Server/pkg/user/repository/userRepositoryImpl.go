@@ -4,7 +4,6 @@ import (
 	"github.com/NiebAnupat/BlogAttractionReviewsApp/Server/database"
 	"github.com/NiebAnupat/BlogAttractionReviewsApp/Server/entities"
 	_userException "github.com/NiebAnupat/BlogAttractionReviewsApp/Server/pkg/user/exception"
-	userModel "github.com/NiebAnupat/BlogAttractionReviewsApp/Server/pkg/user/model"
 	// "gorm.io/gorm"
 )
 
@@ -16,19 +15,20 @@ func NewUserRepositoryImpl(db database.Database) UserRepository {
 	return &UserRepositoryImpl{DB: db}
 }
 
-func (r *UserRepositoryImpl) Create(userEntity *entities.User) (*userModel.User, error) {
+func (r *UserRepositoryImpl) Create(userEntity *entities.User) (*entities.User, error) {
 	err := r.DB.Connect().Create(userEntity).Error
 	if err != nil {
 		return nil, &_userException.UserCreate{ID: userEntity.ID}
 	}
-	return userEntity.ToUserModel(), nil
+	return userEntity, nil
 }
 
-func (r *UserRepositoryImpl) FindByUsername(username string) (*userModel.User, error) {
+func (r *UserRepositoryImpl) FindByUsername(username string) (*entities.User, error) {
 	user := &entities.User{}
-	err := r.DB.Connect().First(user, username).Error
+
+	err := r.DB.Connect().First(user, "username = ?", username).Error
 	if err != nil {
-		return nil, err
+		return nil, &_userException.UserNotFound{Username: username}
 	}
-	return user.ToUserModel(), nil
+	return user, nil
 }

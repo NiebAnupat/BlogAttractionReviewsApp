@@ -25,11 +25,10 @@ func (u *UserServiceImpl) CreateUser(userCreateReq *model.UserCreateReq) (*_user
 		ID:       uid,
 		Username: userCreateReq.Username,
 		Password: userCreateReq.Password,
-		Email:    userCreateReq.Email,
 		Avatar:   userCreateReq.Avatar,
 	}
 
-	userModel, err := u.userRepository.Create(user)
+	user, err := u.userRepository.Create(user)
 	if err != nil {
 		err = u.fileStrorageService.DeleteFile(userCreateReq.Avatar)
 		if err != nil {
@@ -37,7 +36,7 @@ func (u *UserServiceImpl) CreateUser(userCreateReq *model.UserCreateReq) (*_user
 		}
 		return nil, &userException.UserCreate{ID: uid}
 	}
-	return userModel, nil
+	return user.ToUserModel(), nil
 }
 
 // GetUserByID implements UserService.
@@ -46,7 +45,7 @@ func (u *UserServiceImpl) GetUserByUsername(username string) (*model.User, error
 	if err != nil {
 		return nil, err
 	}
-	return user, nil
+	return user.ToUserModel(), nil
 }
 
 func NewUserServiceImpl(userRepository repository.UserRepository, fileStorageService _fileStorageService.FileStorageService) UserService {

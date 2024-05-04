@@ -36,10 +36,15 @@ type (
 		}
 	}
 
+	JWT struct {
+		SecretKey string `mapstructure:"secret" validate:"required"`
+	}
+
 	Config struct {
 		Database *Database `mapstructure:"database" validate:"required"`
 		Server   *Server   `mapstructure:"server" validate:"required"`
 		AWS      *AWS      `mapstructure:"aws" validate:"required"`
+		JWT      *JWT      `mapstructure:"jwt" validate:"required"`
 	}
 )
 

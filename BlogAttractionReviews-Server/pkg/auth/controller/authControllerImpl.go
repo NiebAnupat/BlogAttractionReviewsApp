@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"errors"
+
+	_authException "github.com/NiebAnupat/BlogAttractionReviewsApp/Server/pkg/auth/exception"
 	"github.com/NiebAnupat/BlogAttractionReviewsApp/Server/pkg/auth/service"
 	"github.com/gofiber/fiber/v2"
 )
@@ -9,12 +12,25 @@ type AuthControllerImpl struct {
 	authService service.AuthService
 }
 
-func NewAuthControllerImpl(authService service.AuthService) AuthController {
-	return &AuthControllerImpl{authService: authService}
-}
-
 func (a *AuthControllerImpl) Login(c *fiber.Ctx) error {
-	panic("implement me")
+
+	username := c.FormValue("username")
+	password := c.FormValue("password")
+
+	token, err := a.authService.Login(username, password)
+	if err != nil {
+		if errors.Is(err, &_authException.WrongPassword{}) {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "Wrong password",
+			})
+		}
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Login successfully",
+		"token":   token,
+	})
+
 }
 
 func (a *AuthControllerImpl) Logout(c *fiber.Ctx) error {
@@ -47,4 +63,8 @@ func (a *AuthControllerImpl) VerifyToken(c *fiber.Ctx) error {
 
 func (a *AuthControllerImpl) RefreshToken(c *fiber.Ctx) error {
 	panic("unimplemented")
+}
+
+func NewAuthControllerImpl(authService service.AuthService) AuthController {
+	return &AuthControllerImpl{authService: authService}
 }

@@ -13,14 +13,14 @@ func (f *fiberServer) initAuthRouter() {
 	authRepository := _userRepository.NewUserRepositoryImpl(f.db)
 	fileStoreageRepository := _fileStorageRepository.NewFileStorageRepositoryImpl(f.conf)
 	fileStorageService := _fileStorageService.NewFileStorageServiceImpl(fileStoreageRepository)
+	userRepository := _userRepository.NewUserRepositoryImpl(f.db)
 	userService := _userService.NewUserServiceImpl(authRepository, fileStorageService)
-	authService := _authService.NewAuthServiceImple(userService, fileStorageService)
+	authService := _authService.NewAuthServiceImple(userRepository, userService, fileStorageService, f.conf)
 	authController := _authController.NewAuthControllerImpl(authService)
 
 	router := f.app.Group("/v1/auth")
-
 	router.Post("/register", authController.Register)
-	// router.Post("/login", authController.Login)
+	router.Post("/login", authController.Login)
 	// router.Post("/logout", authController.Logout)
 	// router.Post("/verify", authController.VerifyToken)
 	// router.Post("/refresh", authController.RefreshToken)
