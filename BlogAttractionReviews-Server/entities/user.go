@@ -1,6 +1,10 @@
 package entities
 
-import "time"
+import (
+	"time"
+
+	userModel "github.com/NiebAnupat/BlogAttractionReviewsApp/Server/pkg/user/model"
+)
 
 type (
 	User struct {
@@ -27,3 +31,12 @@ type (
 		BlogID string `gorm:"type:varchar(64);not null;"`
 	}
 )
+
+func (u *User) ToUserModel() *userModel.User {
+	return &userModel.User{
+		ID:       u.ID,
+		Username: u.Username,
+		Email:    u.Email,
+		Avatar:   u.Avatar,
+	}
+}

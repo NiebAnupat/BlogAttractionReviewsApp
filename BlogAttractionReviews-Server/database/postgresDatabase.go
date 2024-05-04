@@ -1,4 +1,4 @@
-package databases
+package database
 
 import (
 	"fmt"
@@ -34,5 +34,5 @@ func NewPostgresDatabase(conf *config.Database) Database {
 }
 
 func (p *postgresDatabase) Connect() *gorm.DB {
-	return p.DB
+	return postgresDatabaseInstance.DB
 }

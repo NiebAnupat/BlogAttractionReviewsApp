@@ -5,6 +5,6 @@ import (
 )
 
 type UserService interface {
-	CreateUser(userCreateReq *_userModel.UserCreateReq) (string, error)
-	GetUserByID(id string) (*_userModel.User, error)
+	CreateUser(userCreateReq *_userModel.UserCreateReq) (*_userModel.User, error)
+	GetUserByUsername(username string) (*_userModel.User, error)
 }

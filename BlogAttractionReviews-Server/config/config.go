@@ -27,9 +27,19 @@ type (
 		BodyLimit    string        `mapstructure:"bodyLimit" validate:"required"`
 	}
 
+	AWS struct {
+		Region string `mapstructure:"region" validate:"required"`
+		S3     struct {
+			Bucket          string `mapstructure:"bucket" validate:"required"`
+			AccessKeyID     string `mapstructure:"accessKeyID" validate:"required"`
+			SecretAccessKey string `mapstructure:"secretAccessKey" validate:"required"`
+		}
+	}
+
 	Config struct {
 		Database *Database `mapstructure:"database" validate:"required"`
 		Server   *Server   `mapstructure:"server" validate:"required"`
+		AWS      *AWS      `mapstructure:"aws" validate:"required"`
 	}
 )
 
