@@ -76,7 +76,7 @@ func (a *AuthControllerImpl) VerifyToken(c *fiber.Ctx) error {
 	// remove "Bearer " from token
 	token = token[7:]
 
-	id, err := a.authService.VerifyToken(token)
+	userModel, err := a.authService.VerifyToken(token)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"message": "Invalid token",
@@ -85,7 +85,7 @@ func (a *AuthControllerImpl) VerifyToken(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Token is valid",
-		"id":      id,
+		"user":    userModel,
 	})
 }
 

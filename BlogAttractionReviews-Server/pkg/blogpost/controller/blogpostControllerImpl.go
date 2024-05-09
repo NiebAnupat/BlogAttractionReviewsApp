@@ -96,8 +96,8 @@ func (b *BlogPostControllerImpl) PostNewBlog(c *fiber.Ctx) error {
 
 	token = token[7:]
 
-	uid, err := b.authService.VerifyToken(token)
-	if err != nil || uid == "" {
+	userModel, err := b.authService.VerifyToken(token)
+	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"message": "Unauthorized",
 		})
@@ -157,7 +157,7 @@ func (b *BlogPostControllerImpl) PostNewBlog(c *fiber.Ctx) error {
 	createReq.Title = createReqForm.Title
 	createReq.Description = createReqForm.Description
 	createReq.Thumbnail = filename
-	createReq.AuthorID = uid
+	createReq.AuthorID = userModel.ID
 
 	newBlogPost, err := b.blogPostService.CreateBlogPost(createReq)
 	if err != nil {
@@ -182,8 +182,8 @@ func (b *BlogPostControllerImpl) AddContentToBlogPost(c *fiber.Ctx) error {
 		})
 	}
 	token = token[7:]
-	uid, err := b.authService.VerifyToken(token)
-	if err != nil || uid == "" {
+	_, err := b.authService.VerifyToken(token)
+	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"message": "Unauthorized",
 		})

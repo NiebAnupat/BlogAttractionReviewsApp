@@ -8,7 +8,7 @@ type AuthService interface {
 	Login(username, password string) (string, error)
 	Logout(token string) error
 
-	VerifyToken(token string) (string, error)
+	VerifyToken(token string) (*_userModel.User, error)
 
 	RefreshToken(token string) (string, error)
 
