@@ -16,6 +16,7 @@ type (
 		UpdateAt      time.Time      `gorm:"not null;autoUpdateTime;"`
 		UserLikes     []UserLike     `gorm:"foreignKey:UserID"`
 		UserFavorites []UserFavorite `gorm:"foreignKey:UserID"`
+		BlogPosts     []BlogPost     `gorm:"foreignKey:AuthorID"`
 	}
 
 	UserLike struct {

@@ -38,7 +38,7 @@ func (a *AuthServiceImple) Login(username, password string) (string, error) {
 		return "", &_AuthException.WrongPassword{}
 	}
 
-	token, err := a.signToken(username)
+	token, err := a.signToken(user.ID)
 
 	if err != nil {
 		log.Println(err)
@@ -115,24 +115,24 @@ func (a *AuthServiceImple) VerifyToken(token string) (string, error) {
 	if !ok {
 		return "", &_AuthException.VerifyToken{}
 	}
-	username, ok := claims["username"].(string)
+	id, ok := claims["id"].(string)
 	if !ok {
 		return "", &_AuthException.VerifyToken{}
 	}
 
-	_, err = a.userRepository.FindByUsername(username)
+	_, err = a.userRepository.FindByID(id)
 	if err != nil {
 		log.Println(err)
 		return "", &_AuthException.VerifyToken{}
 	}
 
-	return username, nil
+	return id, nil
 }
 
-func (a *AuthServiceImple) signToken(username string) (string, error) {
+func (a *AuthServiceImple) signToken(id string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().AddDate(0, 3, 0).Unix(),
+		"id":  id,
+		"exp": time.Now().AddDate(0, 3, 0).Unix(),
 	})
 	hmacSecret := []byte(a.conf.JWT.SecretKey)
 	tokenString, err := token.SignedString(hmacSecret)

@@ -32,3 +32,13 @@ func (r *UserRepositoryImpl) FindByUsername(username string) (*entities.User, er
 	}
 	return user, nil
 }
+
+// FindByID implements UserRepository.
+func (r *UserRepositoryImpl) FindByID(id string) (*entities.User, error) {
+	user := &entities.User{}
+	err := r.DB.Connect().First(user, "id = ?", id).Error
+	if err != nil {
+		return nil, &_userException.UserNotFound{}
+	}
+	return user, nil
+}

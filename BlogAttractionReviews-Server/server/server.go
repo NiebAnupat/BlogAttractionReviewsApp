@@ -47,6 +47,7 @@ func (f *fiberServer) Start() {
 	f.app.Get("/v1/healthCheck", f.healthCheck)
 
 	f.initAuthRouter()
+	f.initBlogPostRouter()
 
 	f.httpListening()
 }

@@ -4,6 +4,8 @@ import "github.com/gofiber/fiber/v2"
 
 type BlogPostController interface {
 	PostNewBlog(c *fiber.Ctx) error
+	AddContentToBlogPost(c *fiber.Ctx) error
+
 	GetBlogPostByID(c *fiber.Ctx) error
 	GetAllBlogPost(c *fiber.Ctx) error
 	DeleteBlogPost(c *fiber.Ctx) error

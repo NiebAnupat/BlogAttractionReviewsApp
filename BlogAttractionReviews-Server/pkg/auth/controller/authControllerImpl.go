@@ -26,6 +26,12 @@ func (a *AuthControllerImpl) Login(c *fiber.Ctx) error {
 		}
 	}
 
+	if token == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Username not found",
+		})
+	}
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Login successfully",
 		"token":   token,
@@ -59,9 +65,18 @@ func (a *AuthControllerImpl) Register(c *fiber.Ctx) error {
 
 func (a *AuthControllerImpl) VerifyToken(c *fiber.Ctx) error {
 
-	token := c.FormValue("token")
+	// get token from header
+	token := c.Get("Authorization")
+	if token == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Token is required",
+		})
+	}
 
-	username, err := a.authService.VerifyToken(token)
+	// remove "Bearer " from token
+	token = token[7:]
+
+	id, err := a.authService.VerifyToken(token)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"message": "Invalid token",
@@ -69,8 +84,8 @@ func (a *AuthControllerImpl) VerifyToken(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message":  "Token is valid",
-		"username": username,
+		"message": "Token is valid",
+		"id":      id,
 	})
 }
 
