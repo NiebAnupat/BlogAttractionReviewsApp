@@ -55,7 +55,11 @@ func (b *BlogPostServiceImpl) AddContentToBlogPost(blogContent *_blogPostModel.B
 
 // DeleteBlogPost implements BlogPostService.
 func (b *BlogPostServiceImpl) DeleteBlogPost(id string) error {
-	panic("unimplemented")
+	err := b.blogPostRepository.Delete(id)
+	if err != nil {
+		return &_blogPostException.BlogPostDelete{}
+	}
+	return nil
 }
 
 // FavoriteBlogPost implements BlogPostService.
@@ -65,17 +69,41 @@ func (b *BlogPostServiceImpl) FavoriteBlogPost(userID string, blogPostID string)
 
 // GetAllBlogPost implements BlogPostService.
 func (b *BlogPostServiceImpl) GetAllBlogPost() ([]model.BlogPost, error) {
-	panic("unimplemented")
+	blogs, err := b.blogPostRepository.FindAll()
+	if err != nil {
+		return nil, &_blogPostException.BlogPostNotFound{}
+	}
+
+	var blogPosts []model.BlogPost
+	for _, blog := range blogs {
+		blogPosts = append(blogPosts, *blog.ToBlogPostModel())
+	}
+	return blogPosts, nil
+
 }
 
 // GetAllBlogPostByAuthorID implements BlogPostService.
 func (b *BlogPostServiceImpl) GetAllBlogPostByAuthorID(authorID string) ([]model.BlogPost, error) {
-	panic("unimplemented")
+	blogs, err := b.blogPostRepository.FindAllByAuthorID(authorID)
+	if err != nil {
+		return nil, &_blogPostException.BlogPostNotFound{}
+	}
+
+	var blogPosts []model.BlogPost
+	for _, blog := range blogs {
+		blogPosts = append(blogPosts, *blog.ToBlogPostModel())
+	}
+	return blogPosts, nil
 }
 
 // GetBlogPostByID implements BlogPostService.
 func (b *BlogPostServiceImpl) GetBlogPostByID(id string) (*model.BlogPost, error) {
-	panic("unimplemented")
+	blog, err := b.blogPostRepository.FindByID(id)
+	if err != nil {
+		return nil, &_blogPostException.BlogPostNotFound{ID: id}
+	}
+
+	return blog.ToBlogPostModel(), nil
 }
 
 // LikeBlogPost implements BlogPostService.

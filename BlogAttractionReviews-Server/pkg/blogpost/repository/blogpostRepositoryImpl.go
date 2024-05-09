@@ -53,6 +53,17 @@ func (b *BlogPostRepositoryImpl) FindAll() ([]entities.BlogPost, error) {
 	if err != nil {
 		return nil, &_blogPostException.BlogPostNotFound{}
 	}
+
+	// loop for get content for each blog post
+	for i, blogPost := range blogPosts {
+		blogContent := []*entities.BlogContent{}
+		err := b.db.Connect().Find(&blogContent, "blog_id = ?", blogPost.ID).Error
+		if err != nil {
+			return nil, err
+		}
+		blogPosts[i].Contents = blogContent
+	}
+
 	return blogPosts, nil
 }
 
@@ -63,6 +74,15 @@ func (b *BlogPostRepositoryImpl) FindByID(id string) (*entities.BlogPost, error)
 	if err != nil {
 		return nil, &_blogPostException.BlogPostNotFound{ID: id}
 	}
+
+	blogContent := []*entities.BlogContent{}
+	err = b.db.Connect().Find(&blogContent, "blog_id = ?", blogPost.ID).Error
+	if err != nil {
+		return nil, err
+	}
+
+	blogPost.Contents = blogContent
+
 	return blogPost, nil
 }
 
@@ -73,6 +93,17 @@ func (b *BlogPostRepositoryImpl) FindAllByAuthorID(authorID string) ([]entities.
 	if err != nil {
 		return nil, &_blogPostException.BlogPostNotFound{}
 	}
+
+	// loop for get content for each blog post
+	for i, blogPost := range blogPosts {
+		blogContent := []*entities.BlogContent{}
+		err := b.db.Connect().Find(&blogContent, "blog_id = ?", blogPost.ID).Error
+		if err != nil {
+			return nil, err
+		}
+		blogPosts[i].Contents = blogContent
+	}
+
 	return blogPosts, nil
 }
 

@@ -21,7 +21,18 @@ type BlogPostControllerImpl struct {
 
 // DeleteBlogPost implements BlogPostController.
 func (b *BlogPostControllerImpl) DeleteBlogPost(c *fiber.Ctx) error {
-	panic("unimplemented")
+	blogID := c.Params("bid")
+	err := b.blogPostService.DeleteBlogPost(blogID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to delete blog post",
+			"error":   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Blog post deleted successfully",
+	})
 }
 
 // FavoriteBlogPost implements BlogPostController.
@@ -31,7 +42,36 @@ func (b *BlogPostControllerImpl) FavoriteBlogPost(c *fiber.Ctx) error {
 
 // GetAllBlogPost implements BlogPostController.
 func (b *BlogPostControllerImpl) GetAllBlogPost(c *fiber.Ctx) error {
-	panic("unimplemented")
+
+	authorID := c.Query("aid")
+	if authorID != "" {
+		blogPosts, err := b.blogPostService.GetAllBlogPostByAuthorID(authorID)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": "Failed to get blog posts by author",
+				"error":   err.Error(),
+			})
+		}
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"message": "Get blog posts by author successfully",
+			"blogs":   blogPosts,
+		})
+	} else {
+		blogPosts, err := b.blogPostService.GetAllBlogPost()
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": "Failed to get all blog posts",
+				"error":   err.Error(),
+			})
+		}
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"message": "Get all blog posts successfully",
+			"blogs":   blogPosts,
+		})
+	}
+
 }
 
 // GetBlogPostByID implements BlogPostController.
@@ -168,7 +208,7 @@ func (b *BlogPostControllerImpl) AddContentToBlogPost(c *fiber.Ctx) error {
 	go func() {
 		if contentType == _BlogModel.BlogContentText {
 			value <- c.FormValue("value")
-		} else {
+		} else if contentType == _BlogModel.BlogContentImage {
 			file, err := c.FormFile("value")
 			if err != nil {
 				c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -196,6 +236,12 @@ func (b *BlogPostControllerImpl) AddContentToBlogPost(c *fiber.Ctx) error {
 				return
 			}
 			value <- filename
+		} else {
+			c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": "Invalid content type",
+			})
+			return
+
 		}
 	}()
 
