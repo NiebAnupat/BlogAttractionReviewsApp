@@ -1,7 +1,9 @@
+import 'package:blog_attraction_reviews_flutter/pages/loginPage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const GetMaterialApp(home: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -9,11 +11,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+        body: LoginPage(),
       ),
     );
   }

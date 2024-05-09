@@ -28,6 +28,7 @@ dependencies:
   logger: ^2.2.0
   path_provider: ^2.1.2
   persistent_bottom_nav_bar: ^5.0.2
+  shared_preferences: ^2.2.3
   sqflite: ^2.3.2
   string_validator: ^1.0.2
   toastification: ^1.2.1
