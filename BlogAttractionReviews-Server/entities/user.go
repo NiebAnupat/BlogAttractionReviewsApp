@@ -23,6 +23,7 @@ type (
 		ID     string `gorm:"primaryKey;type:varchar(64);"`
 		UserID string `gorm:"type:varchar(64);not null;"`
 		BlogID string `gorm:"type:varchar(64);not null;"`
+		// User   User   `gorm:"foreignKey:UserID"`
 	}
 
 	UserFavorite struct {

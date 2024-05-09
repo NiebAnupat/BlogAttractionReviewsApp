@@ -6,7 +6,7 @@ import (
 
 type BlogPostService interface {
 	CreateBlogPost(blogPostCreateReq *_blogPostModel.BlogPostCreateReq) (*_blogPostModel.BlogPost, error)
-	AddContentToBlogPost(blogPostID string, blogContent *_blogPostModel.BlogContentCreateReq) (*_blogPostModel.BlogContent, error)
+	AddContentToBlogPost(blogContent *_blogPostModel.BlogContentCreateReq) (*_blogPostModel.BlogContent, error)
 	GetBlogPostByID(id string) (*_blogPostModel.BlogPost, error)
 	GetAllBlogPost() ([]_blogPostModel.BlogPost, error)
 	GetAllBlogPostByAuthorID(authorID string) ([]_blogPostModel.BlogPost, error)

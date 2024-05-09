@@ -26,11 +26,11 @@ func (f *FileStorageServiceImpl) GetFile(filename string) ([]byte, error) {
 
 // UploadFile implements FileStorageService.
 func (f *FileStorageServiceImpl) UploadFile(file io.Reader, filename string) (string, error) {
-	imageURL, err := f.fileStorageRepository.UploadFile(file, filename)
+	filename, err := f.fileStorageRepository.UploadFile(file, filename)
 	if err != nil {
 		return "", err
 	}
-	return imageURL, nil
+	return filename, nil
 }
 
 func NewFileStorageServiceImpl(fileStorageRepository _fileStorageRepository.FileStorageRepository) FileStorageService {

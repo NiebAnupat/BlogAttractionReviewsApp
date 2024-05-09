@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/NiebAnupat/BlogAttractionReviewsApp/Server/entities"
 	_blogPostException "github.com/NiebAnupat/BlogAttractionReviewsApp/Server/pkg/blogpost/exception"
 	"github.com/NiebAnupat/BlogAttractionReviewsApp/Server/pkg/blogpost/model"
@@ -35,14 +37,14 @@ func (b *BlogPostServiceImpl) CreateBlogPost(blogPostCreateReq *model.BlogPostCr
 }
 
 // AddContentToBlogPost implements BlogPostService.
-func (b *BlogPostServiceImpl) AddContentToBlogPost(blogPostID string, blogContent *_blogPostModel.BlogContentCreateReq) (*_blogPostModel.BlogContent, error) {
+func (b *BlogPostServiceImpl) AddContentToBlogPost(blogContent *_blogPostModel.BlogContentCreateReq) (*_blogPostModel.BlogContent, error) {
 	content := new(entities.BlogContent)
 	content.ID = uuid.New().String()
-	content.BlogID = blogPostID
+	content.BlogID = blogContent.BlogID
 	content.Order = blogContent.Order
 	content.Type = blogContent.Type
 	content.Value = blogContent.Value
-
+	log.Println(content)
 	newContent, err := b.blogPostRepository.CreateContent(content)
 	if err != nil {
 		return nil, &_blogPostException.BlogContentCreate{}

@@ -27,6 +27,6 @@ func (f *fiberServer) initBlogPostRouter() {
 
 	router := f.app.Group("/v1/blog")
 	router.Post("/", blogPostController.PostNewBlog)
-	router.Post("/content/:blog", blogPostController.AddContentToBlogPost)
+	router.Post("/content", blogPostController.AddContentToBlogPost)
 
 }

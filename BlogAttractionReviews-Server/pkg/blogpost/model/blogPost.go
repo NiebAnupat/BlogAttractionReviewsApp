@@ -6,22 +6,15 @@ import (
 )
 
 const (
-	BlogContentText ContentType = iota + 1
+	BlogContentText int = iota
 	BlogContentImage
 )
 
 type (
-	ContentType           int
 	BlogPostCreateFormReq struct {
 		Title       string                `json:"title"`
 		Description string                `json:"description" `
 		Thumbnail   *multipart.FileHeader `json:"thumbnail,omitempty"`
-	}
-
-	BlogContentCreateFormReq struct {
-		Order int         `json:"order" `
-		Type  ContentType `json:"type"`
-		Value interface{} `json:"value"`
 	}
 
 	BlogPostCreateReq struct {
@@ -32,7 +25,9 @@ type (
 	}
 
 	BlogContentCreateReq struct {
-		Order int
+		BlogID string
+		Order  int
+		// Type 1 = Image, 0 = Text
 		Type  int
 		Value string
 	}

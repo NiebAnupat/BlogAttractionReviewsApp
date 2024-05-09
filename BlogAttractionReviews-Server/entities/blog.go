@@ -8,16 +8,16 @@ import (
 
 type (
 	BlogPost struct {
-		ID            string         `gorm:"primaryKey;type:varchar(64);"`
-		Title         string         `gorm:"type:varchar(64);not null;"`
-		Description   string         `gorm:"type:text;not null;"`
-		Thumbnail     string         `gorm:"type:varchar(64);not null;"`
-		CreateAt      time.Time      `gorm:"not null;autoCreateTime;"`
-		UpdateAt      time.Time      `gorm:"not null;autoUpdateTime;"`
-		Contents      []*BlogContent `gorm:"foreignKey:BlogID"`
-		AuthorID      string         `gorm:"type:varchar(64);not null;"`
-		UserLikes     []UserLike     `gorm:"foreignKey:BlogID"`
-		UserFavorites []UserFavorite `gorm:"foreignKey:BlogID"`
+		ID            string          `gorm:"primaryKey;type:varchar(64);"`
+		Title         string          `gorm:"type:varchar(64);not null;"`
+		Description   string          `gorm:"type:text;not null;"`
+		Thumbnail     string          `gorm:"type:varchar(64);not null;"`
+		CreateAt      time.Time       `gorm:"not null;autoCreateTime;"`
+		UpdateAt      time.Time       `gorm:"not null;autoUpdateTime;"`
+		Contents      []*BlogContent  `gorm:"foreignKey:BlogID;constraint:OnDelete:CASCADE"`
+		AuthorID      string          `gorm:"type:varchar(64);not null;"`
+		UserLikes     []*UserLike     `gorm:"foreignKey:BlogID;constraint:OnDelete:CASCADE"`
+		UserFavorites []*UserFavorite `gorm:"foreignKey:BlogID;constraint:OnDelete:CASCADE"`
 	}
 
 	BlogContent struct {
@@ -58,7 +58,8 @@ func (b *BlogPost) ToBlogContentModel() []*model.BlogContent {
 
 func (c *BlogContent) ToBlogContentModel() *model.BlogContent {
 	return &model.BlogContent{
-		ID:    c.ID,
+		ID: c.ID,
+		// BlogID: c.BlogID,
 		Order: c.Order,
 		Type:  c.Type,
 		Value: c.Value,

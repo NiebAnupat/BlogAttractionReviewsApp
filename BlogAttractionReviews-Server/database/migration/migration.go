@@ -23,10 +23,16 @@ func main() {
 	dropAllTableIfExits(tx)
 	clearS3Buckets(conf)
 
-	userMigration(tx)
-	blogMigration(tx)
-	userLikeMigration(tx)
-	userFavoriteMigration(tx)
+	// userMigration(tx)
+	// blogMigration(tx)
+	// userLikeMigration(tx)
+	// userFavoriteMigration(tx)
+
+	// auto migration
+	if err := tx.AutoMigrate(&entities.User{}, &entities.BlogPost{}, &entities.BlogContent{}, &entities.UserLike{}, &entities.UserFavorite{}); err != nil {
+		tx.Rollback()
+		panic(err)
+	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
@@ -54,14 +60,15 @@ func userFavoriteMigration(tx *gorm.DB) {
 }
 
 func dropAllTableIfExits(tx *gorm.DB) {
-	isTableExist := tx.Migrator().HasTable(&entities.User{})
-	if isTableExist {
-		_ = tx.Migrator().DropTable(&entities.User{})
-		_ = tx.Migrator().DropTable(&entities.BlogPost{})
-		_ = tx.Migrator().DropTable(&entities.BlogContent{})
-		_ = tx.Migrator().DropTable(&entities.UserLike{})
-		_ = tx.Migrator().DropTable(&entities.UserFavorite{})
-
+	tables, err := tx.Migrator().GetTables()
+	if err != nil {
+		panic(err)
+	}
+	if len(tables) > 0 {
+		for _, table := range tables {
+			_ = tx.Migrator().DropTable(table)
+			log.Printf("----| Table %s has been dropped", table)
+		}
 		log.Println("All table has been dropped")
 	}
 }
