@@ -20,8 +20,12 @@ func (f *FileStorageServiceImpl) DeleteFile(filename string) error {
 }
 
 // GetFile implements FileStorageService.
-func (f *FileStorageServiceImpl) GetFile(filename string) ([]byte, error) {
-	panic("unimplemented")
+func (f *FileStorageServiceImpl) GetFile(filename string) (io.Reader, error) {
+	file, err := f.fileStorageRepository.GetFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return file, nil
 }
 
 // UploadFile implements FileStorageService.

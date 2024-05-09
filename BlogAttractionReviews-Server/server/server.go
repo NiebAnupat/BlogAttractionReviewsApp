@@ -48,6 +48,7 @@ func (f *fiberServer) Start() {
 
 	f.initAuthRouter()
 	f.initBlogPostRouter()
+	f.initFileStorageRouter()
 
 	f.httpListening()
 }

@@ -49,8 +49,20 @@ func (f *FileStorageRepositoryImpl) DeleteFile(filename string) error {
 }
 
 // GetFile implements FileStorageRepository.
-func (f *FileStorageRepositoryImpl) GetFile(filename string) ([]byte, error) {
-	panic("unimplemented")
+func (f *FileStorageRepositoryImpl) GetFile(filename string) (io.Reader, error) {
+	s3Client := f.getS3Client()
+
+	result, err := s3Client.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(f.conf.AWS.S3.Bucket),
+		Key:    aws.String(filename),
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result.Body, nil
+
 }
 
 // UploadFile implements FileStorageRepository.
@@ -59,7 +71,6 @@ func (f *FileStorageRepositoryImpl) UploadFile(file io.Reader, filename string) 
 	s3Client := f.getS3Client()
 
 	uploader := s3manager.NewUploaderWithClient(s3Client)
-
 	_, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(f.conf.AWS.S3.Bucket),
 		Key:    aws.String(filename),
