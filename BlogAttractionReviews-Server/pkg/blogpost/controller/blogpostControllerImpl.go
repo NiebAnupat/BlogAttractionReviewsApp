@@ -188,7 +188,7 @@ func (b *BlogPostControllerImpl) AddContentToBlogPost(c *fiber.Ctx) error {
 			"message": "Unauthorized",
 		})
 	}
-	order, err := strconv.Atoi(c.FormValue("order"))
+	order, err := strconv.Atoi("1")
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Order is invalid",

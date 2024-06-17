@@ -18,6 +18,7 @@ type (
 		DBName   string `mapstructure:"dbname" validate:"required"`
 		SSLMode  string `mapstructure:"sslmode" validate:"required"`
 		Schema   string `mapstructure:"schema" validate:"required"`
+		Charset  string `mapstructure:"charset" validate:"required"`
 	}
 
 	Server struct {
